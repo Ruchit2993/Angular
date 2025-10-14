@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { NV } from '../../shared/nv';
 
 @Component({
   selector: 'app-login',
@@ -15,8 +16,11 @@ export class Login {
   loginForm: FormGroup;
   submitted = false;
 
-  // hobby labels to map FormArray indices to names
-  hobbiesLabels = ['Reading', 'Sports', 'Music'];
+  // hobby labels to map FormArray indices to names (from NV)
+  hobbiesLabels = NV.hobbies;
+
+  // expose NV for template usage (labels, placeholders, button text, lists)
+  readonly nv = NV;
 
   constructor(private router: Router, private fb: FormBuilder) {
     // build reactive form with validators and a form-level password match validator
