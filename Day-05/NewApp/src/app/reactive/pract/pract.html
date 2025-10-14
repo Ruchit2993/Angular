@@ -1,0 +1,43 @@
+<!-- <form >
+    <input type="text" name="name" [formControl]="name" placeholder="Enter your name" />
+    <br/>
+    <br/>   
+    <input type="text" name="password" [formControl]="password" placeholder="Enter your password" />
+    <br/>
+    <br/>
+    <h3>{{name.value}}</h3>
+    <h3>{{password.value}}</h3>
+    <br/>
+    <br/>
+    <button (click)="displayValues()">Login</button>
+</form>
+<br/>
+<br/> -->
+
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <label>Login Form</label>   
+
+    <br/>
+    <br/>
+    <label for="name">Name: </label>
+    <input type="text" name="name" formControlName="name" placeholder="Enter your name" />
+    <br/>
+    <span *ngIf="name?.hasError('required')" style="color:red">Provide valid name. </span>
+    <span *ngIf="name?.invalid && (name?.dirty || name?.touched )" style="color:red">Name is required.</span>
+    <br/>   
+    <label for="password">Password: </label> 
+    <input type="text" name="password" formControlName="password" placeholder="Enter your password" />
+    <br/>
+     <span *ngIf="password?.hasError('required')" style="color:red">Provide valid password. </span>
+    <span *ngIf="password?.invalid && (password?.dirty || password?.touched )" style="color:red">Password is required.</span>
+    <br/>
+    <!-- <button (click)="displayValues()">Login</button> -->
+    <!-- <button type="button" (click)="setValues()">Set Value</button> -->
+    <!-- <br/> -->
+    <!-- <br/> -->
+    <!-- <h3>{{this.profileForm.value.name}}</h3>
+    <h3>{{this.profileForm.value.password}}</h3> -->
+    <button type="submit" [disabled]="profileForm.invalid">Login</button>
+</form>
+
+ 

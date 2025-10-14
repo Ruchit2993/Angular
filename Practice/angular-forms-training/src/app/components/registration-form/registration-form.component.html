@@ -1,0 +1,276 @@
+<div class="form-container">
+  <h2>📝 User Registration Form</h2>
+  <p class="subtitle">Complete form with comprehensive validation examples</p>
+
+  <!-- Success Message -->
+  <div class="success-message" *ngIf="submitted && submittedData">
+    Registration successful! Welcome, {{ submittedData.username }}!
+  </div>
+
+  <!-- Info Box -->
+  <div class="info-box">
+    <h3>📖 Learning Points:</h3>
+    <ul>
+      <li><strong>required</strong> - Field must not be empty</li>
+      <li><strong>minlength/maxlength</strong> - Text length constraints</li>
+      <li><strong>email</strong> - Valid email format validation</li>
+      <li><strong>pattern</strong> - Custom regex pattern matching</li>
+      <li><strong>min/max</strong> - Number range validation</li>
+      <li><strong>Custom validation</strong> - Password matching logic</li>
+    </ul>
+  </div>
+
+  <form #registrationForm="ngForm" (ngSubmit)="onSubmit(registrationForm)">
+    
+    <!-- Username Field -->
+    <div class="form-group">
+      <label for="username">Username *</label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        [(ngModel)]="user.username"
+        #username="ngModel"
+        required
+        minlength="3"
+        maxlength="20"
+        pattern="^[a-zA-Z0-9_]+$"
+        placeholder="Enter username (letters, numbers, underscore only)"
+      >
+      
+      <!-- Validation Messages -->
+      <div class="error-message" *ngIf="username.invalid && username.touched">
+        <span *ngIf="username.errors?.['required']">Username is required</span>
+        <span *ngIf="username.errors?.['minlength']">
+          Username must be at least 3 characters long
+        </span>
+        <span *ngIf="username.errors?.['maxlength']">
+          Username cannot exceed 20 characters
+        </span>
+        <span *ngIf="username.errors?.['pattern']">
+          Username can only contain letters, numbers, and underscores
+        </span>
+      </div>
+    </div>
+
+    <!-- Email Field -->
+    <div class="form-group">
+      <label for="email">Email Address *</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        [(ngModel)]="user.email"
+        #email="ngModel"
+        required
+        email
+        placeholder="Enter your email address"
+      >
+      
+      <div class="error-message" *ngIf="email.invalid && email.touched">
+        <span *ngIf="email.errors?.['required']">Email is required</span>
+        <span *ngIf="email.errors?.['email']">Please enter a valid email address</span>
+      </div>
+    </div>
+
+    <!-- Password Field -->
+    <div class="form-group">
+      <label for="password">Password *</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        [(ngModel)]="user.password"
+        #password="ngModel"
+        required
+        minlength="8"
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+        placeholder="Enter a strong password"
+      >
+      
+      <div class="error-message" *ngIf="password.invalid && password.touched">
+        <span *ngIf="password.errors?.['required']">Password is required</span>
+        <span *ngIf="password.errors?.['minlength']">
+          Password must be at least 8 characters long
+        </span>
+        <span *ngIf="password.errors?.['pattern']">
+          Password must contain uppercase, lowercase, number, and special character
+        </span>
+      </div>
+    </div>
+
+    <!-- Confirm Password Field -->
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password *</label>
+      <input
+        type="password"
+        id="confirmPassword"
+        name="confirmPassword"
+        [(ngModel)]="user.confirmPassword"
+        #confirmPassword="ngModel"
+        required
+        placeholder="Re-enter your password"
+      >
+      
+      <div class="error-message" *ngIf="confirmPassword.invalid && confirmPassword.touched">
+        <span *ngIf="confirmPassword.errors?.['required']">Please confirm your password</span>
+      </div>
+      
+      <!-- Custom validation for password match -->
+      <div class="error-message" 
+           *ngIf="confirmPassword.touched && user.confirmPassword && !passwordsMatch()">
+        Passwords do not match
+      </div>
+    </div>
+
+    <!-- Age Field -->
+    <div class="form-group">
+      <label for="age">Age *</label>
+      <input
+        type="number"
+        id="age"
+        name="age"
+        [(ngModel)]="user.age"
+        #age="ngModel"
+        required
+        min="18"
+        max="120"
+        placeholder="Enter your age"
+      >
+      
+      <div class="error-message" *ngIf="age.invalid && age.touched">
+        <span *ngIf="age.errors?.['required']">Age is required</span>
+        <span *ngIf="age.errors?.['min']">You must be at least 18 years old</span>
+        <span *ngIf="age.errors?.['max']">Please enter a valid age</span>
+      </div>
+    </div>
+
+    <!-- Gender Field -->
+    <div class="form-group">
+      <label>Gender *</label>
+      <div class="radio-group">
+        <label>
+          <input
+            type="radio"
+            name="gender"
+            value="male"
+            [(ngModel)]="user.gender"
+            #gender="ngModel"
+            required
+          >
+          Male
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="gender"
+            value="female"
+            [(ngModel)]="user.gender"
+            required
+          >
+          Female
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="gender"
+            value="other"
+            [(ngModel)]="user.gender"
+            required
+          >
+          Other
+        </label>
+      </div>
+      
+      <div class="error-message" *ngIf="gender.invalid && gender.touched">
+        <span *ngIf="gender.errors?.['required']">Please select your gender</span>
+      </div>
+    </div>
+
+    <!-- Country Field -->
+    <div class="form-group">
+      <label for="country">Country *</label>
+      <select
+        id="country"
+        name="country"
+        [(ngModel)]="user.country"
+        #country="ngModel"
+        required
+      >
+        <option value="">Select your country</option>
+        <option *ngFor="let c of countries" [value]="c">{{ c }}</option>
+      </select>
+      
+      <div class="error-message" *ngIf="country.invalid && country.touched">
+        <span *ngIf="country.errors?.['required']">Please select your country</span>
+      </div>
+    </div>
+
+    <!-- Terms and Conditions Checkbox -->
+    <div class="form-group">
+      <div class="checkbox-group">
+        <label>
+          <input
+            type="checkbox"
+            name="agreeToTerms"
+            [(ngModel)]="user.agreeToTerms"
+            #agreeToTerms="ngModel"
+            required
+          >
+          I agree to the Terms and Conditions *
+        </label>
+      </div>
+      
+      <div class="error-message" *ngIf="agreeToTerms.invalid && agreeToTerms.touched">
+        <span *ngIf="agreeToTerms.errors?.['required']">
+          You must agree to the terms and conditions
+        </span>
+      </div>
+    </div>
+
+    <!-- Newsletter Checkbox (Optional) -->
+    <div class="form-group">
+      <div class="checkbox-group">
+        <label>
+          <input
+            type="checkbox"
+            name="newsletter"
+            [(ngModel)]="user.newsletter"
+          >
+          Subscribe to newsletter (optional)
+        </label>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button 
+        type="submit" 
+        class="btn btn-primary"
+        [disabled]="registrationForm.invalid || !passwordsMatch()"
+      >
+        Register
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-secondary" 
+        (click)="onReset(registrationForm)"
+      >
+        Reset
+      </button>
+    </div>
+
+    <!-- Form Debug Info (for learning purposes) -->
+    <div class="info-box" style="margin-top: 20px;">
+      <h3>🔍 Form State (Debug Info):</h3>
+      <ul>
+        <li><strong>Form Valid:</strong> {{ registrationForm.valid }}</li>
+        <li><strong>Form Touched:</strong> {{ registrationForm.touched }}</li>
+        <li><strong>Form Dirty:</strong> {{ registrationForm.dirty }}</li>
+        <li><strong>Passwords Match:</strong> {{ passwordsMatch() }}</li>
+      </ul>
+    </div>
+
+  </form>
+</div>
+

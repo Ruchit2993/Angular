@@ -1,0 +1,9 @@
+/* Component-specific styles */
+.radio-group label {
+  padding: 8px 0;
+}
+
+.checkbox-group label {
+  padding: 5px 0;
+}
+

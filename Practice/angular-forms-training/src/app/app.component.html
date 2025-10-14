@@ -1,0 +1,26 @@
+<div class="container">
+  <header class="header">
+    <h1>🚀 Angular Template-Driven Forms Training</h1>
+    <p>Learn Form Validation with Practical Examples</p>
+  </header>
+
+  <nav class="nav-tabs">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      Home
+    </a>
+    <a routerLink="/registration" routerLinkActive="active">
+      Registration Form
+    </a>
+    <a routerLink="/login" routerLinkActive="active">
+      Login Form
+    </a>
+    <a routerLink="/contact" routerLinkActive="active">
+      Contact Form
+    </a>
+  </nav>
+
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>
+

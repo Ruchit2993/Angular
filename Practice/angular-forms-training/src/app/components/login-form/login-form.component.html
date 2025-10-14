@@ -1,0 +1,130 @@
+<div class="form-container">
+  <h2>🔐 Login Form</h2>
+  <p class="subtitle">Basic validation with email and password</p>
+
+  <!-- Success Message -->
+  <div class="success-message" *ngIf="submitted && submittedData">
+    Login successful! Welcome back, {{ submittedData.email }}!
+  </div>
+
+  <!-- Info Box -->
+  <div class="info-box">
+    <h3>📖 Learning Points:</h3>
+    <ul>
+      <li><strong>Basic required validation</strong> - Essential fields must be filled</li>
+      <li><strong>Email format validation</strong> - Ensures proper email structure</li>
+      <li><strong>Form state tracking</strong> - Understanding touched, dirty, valid states</li>
+      <li><strong>Conditional button disabling</strong> - Submit only when form is valid</li>
+      <li><strong>Optional fields</strong> - Remember me checkbox without validation</li>
+    </ul>
+  </div>
+
+  <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+    
+    <!-- Email Field -->
+    <div class="form-group">
+      <label for="email">Email Address *</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        [(ngModel)]="credentials.email"
+        #email="ngModel"
+        required
+        email
+        placeholder="Enter your email"
+        autocomplete="email"
+      >
+      
+      <div class="error-message" *ngIf="email.invalid && email.touched">
+        <span *ngIf="email.errors?.['required']">Email is required</span>
+        <span *ngIf="email.errors?.['email']">
+          Please enter a valid email address
+        </span>
+      </div>
+    </div>
+
+    <!-- Password Field -->
+    <div class="form-group">
+      <label for="password">Password *</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        [(ngModel)]="credentials.password"
+        #password="ngModel"
+        required
+        minlength="6"
+        placeholder="Enter your password"
+        autocomplete="current-password"
+      >
+      
+      <div class="error-message" *ngIf="password.invalid && password.touched">
+        <span *ngIf="password.errors?.['required']">Password is required</span>
+        <span *ngIf="password.errors?.['minlength']">
+          Password must be at least 6 characters long
+        </span>
+      </div>
+    </div>
+
+    <!-- Remember Me Checkbox -->
+    <div class="form-group">
+      <div class="checkbox-group">
+        <label>
+          <input
+            type="checkbox"
+            name="rememberMe"
+            [(ngModel)]="credentials.rememberMe"
+          >
+          Remember me
+        </label>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button 
+        type="submit" 
+        class="btn btn-primary"
+        [disabled]="loginForm.invalid"
+      >
+        Login
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-secondary"
+        (click)="onReset(loginForm)"
+      >
+        Clear
+      </button>
+    </div>
+
+    <!-- Form Debug Info (for learning purposes) -->
+    <div class="info-box" style="margin-top: 20px;">
+      <h3>🔍 Form State (Debug Info):</h3>
+      <ul>
+        <li><strong>Form Valid:</strong> {{ loginForm.valid }}</li>
+        <li><strong>Form Touched:</strong> {{ loginForm.touched }}</li>
+        <li><strong>Form Dirty:</strong> {{ loginForm.dirty }}</li>
+        <li><strong>Email Valid:</strong> {{ email.valid }}</li>
+        <li><strong>Email Touched:</strong> {{ email.touched }}</li>
+        <li><strong>Password Valid:</strong> {{ password.valid }}</li>
+        <li><strong>Password Touched:</strong> {{ password.touched }}</li>
+      </ul>
+    </div>
+
+  </form>
+
+  <!-- Additional Learning Tips -->
+  <div class="info-box" style="margin-top: 20px; background: #fff3cd; border-left-color: #ffc107;">
+    <h3>💡 Try This:</h3>
+    <ul>
+      <li>Click on email field and then click away - notice the "touched" state</li>
+      <li>Start typing in a field - observe the "dirty" state change</li>
+      <li>Try entering an invalid email format (e.g., "test")</li>
+      <li>Notice how the submit button stays disabled until form is valid</li>
+      <li>Check browser DevTools to see Angular's CSS classes (ng-valid, ng-invalid, etc.)</li>
+    </ul>
+  </div>
+</div>
+

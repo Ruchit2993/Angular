@@ -1,0 +1,55 @@
+
+<nav>
+  <a routerLink="/reactive/pract">Open Reactive Pract</a>
+</nav>
+<br />
+<br />
+<router-outlet></router-outlet>
+
+<br />
+<br />
+<h1>
+  <!-- {{title}}   -->
+  {{title()}}
+  {{name}}
+</h1>
+<div style="text-align: center;">
+  <h2> {{count}}</h2>
+  <button (click)="handleIncrement()" class="btn">Increment</button>
+  <button (click)="handleDecrement()" class="btn">Decrement</button>
+  <button (click)="handleReset()" class="btn">Reset</button>
+
+</div>
+
+<h1>User name is = {{displayName}}</h1>
+<input type="text" value="{{name2}}" (input)="getName($event)" />
+<button (click)="showName()">Show Name</button>
+<button (click)="setName()">Set Name</button>
+
+<hr>
+
+<h1>User email is = {{email}}</h1>
+<input type="email" value="{{email}}" placeholder="Enter Email" #emailField />
+<button (click)="getEmail(emailField.value)">Get Email</button>
+<button (click)="setEmail()">Set Email</button>
+
+<hr>
+
+<input type="text" [(ngModel)]="task" placeholder="Enter new task" />
+<button (click)="addTask()">Add Task</button>
+<!-- <h2>{{task}}</h2>
+<h2>{{taskList}}</h2> -->
+
+@for(task of taskList; track task.id){
+  <ul>
+    <li>{{task.task}}</li>
+  </ul>
+}
+  
+
+   
+<!-- <ul *ngFor="let t of taskList; let i = index">
+  <li > {{t.id}} </li>
+  <li > {{t.task}}</li>
+  <li><button (click)="deleteTask(t.id)">Delete</button></li>
+</ul> -->
