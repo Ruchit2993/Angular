@@ -1,0 +1,142 @@
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header bg-info text-white">
+      <h3>Login Form</h3>
+    </div>
+    <div class="card-body bg-light">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+
+        <div class="row mb-3">
+          <div class="col">
+            <label class="form-label">First Name</label>
+            <input formControlName="firstName" type="text" class="form-control">
+            <div class="invalid-feedback d-block" *ngIf="firstName?.invalid && (firstName?.touched || submitted)">
+              <span *ngIf="firstName?.errors?.['required']">First name is required.</span>
+            </div>
+          </div>
+
+          <div class="col">
+            <label class="form-label">Middle Name</label>
+            <input formControlName="middleName" type="text" class="form-control">
+            <div class="invalid-feedback d-block" *ngIf="middleName?.invalid && (middleName?.touched || submitted)">
+              <span *ngIf="middleName?.errors?.['required']">Middle name is required.</span>
+            </div>
+          </div>
+
+          <div class="col">
+            <label class="form-label">Last Name</label>
+            <input formControlName="lastName" type="text" class="form-control">
+            <div class="invalid-feedback d-block" *ngIf="lastName?.invalid && (lastName?.touched || submitted)">
+              <span *ngIf="lastName?.errors?.['required']">Last name is required.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Mobile Number</label>
+          <input formControlName="mobile" type="tel" class="form-control">
+          <div class="invalid-feedback d-block" *ngIf="mobile?.invalid && (mobile?.touched || submitted)">
+            <span *ngIf="mobile?.errors?.['required']">Mobile number is required.</span>
+            <span *ngIf="mobile?.errors?.['pattern']">Mobile must be 10 digits.</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input formControlName="email" type="email" class="form-control">
+          <div class="invalid-feedback d-block" *ngIf="email?.invalid && (email?.touched || submitted)">
+            <span *ngIf="email?.errors?.['required']">Email is required.</span>
+            <span *ngIf="email?.errors?.['email']">Invalid email format.</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Gender</label><br>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" formControlName="gender" type="radio" id="male" value="male">
+            <label class="form-check-label" for="male">Male</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" formControlName="gender" type="radio" id="female" value="female">
+            <label class="form-check-label" for="female">Female</label>
+          </div>
+          <div class="invalid-feedback d-block" *ngIf="gender?.invalid && (gender?.touched || submitted)">
+            <span *ngIf="gender?.errors?.['required']">Gender is required.</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Hobby</label><br>
+          <div formArrayName="hobbies">
+            <div class="form-check form-check-inline" *ngFor="let hb of hobbies.controls; let i = index">
+              <input class="form-check-input" type="checkbox" [formControlName]="i" [id]="'hobby'+i">
+              <label class="form-check-label" [for]="'hobby'+i">{{ hobbiesLabels[i] }}</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Address</label>
+          <textarea formControlName="address" class="form-control" rows="2"></textarea>
+          <div class="invalid-feedback d-block" *ngIf="address?.invalid && (address?.touched || submitted)">
+            <span *ngIf="address?.errors?.['required']">Address is required.</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Country</label>
+          <select formControlName="country" class="form-select">
+            <option value="">Select Country</option>
+            <option value="India">India</option>
+            <option value="USA">USA</option>
+            <option value="UK">UK</option>
+            <option value="Canada">Canada</option>
+          </select>
+          <div class="invalid-feedback d-block" *ngIf="country?.invalid && (country?.touched || submitted)">
+            <span *ngIf="country?.errors?.['required']">Country is required.</span>
+          </div>
+        </div>
+
+        <div class="mb-3 position-relative">
+          <label class="form-label">Password</label>
+          <input formControlName="password" type="password" class="form-control" id="password">
+          <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;"
+            (click)="togglePassword('password', $event)">
+            <i class="bi bi-eye" id="eye-password" aria-hidden="true"></i>
+          </span>
+          <div class="form-text text-muted">
+            Password must be 8–16 characters and include at least one uppercase letter,
+            one lowercase letter, one number, and one special character.
+          </div>
+          <div class="invalid-feedback d-block" *ngIf="password?.invalid && (password?.touched || submitted)">
+            <span *ngIf="password?.errors?.['required']">Password is required.</span>
+            <span *ngIf="password?.errors?.['minlength']">Password must be at least 8 characters.</span>
+            <span *ngIf="password?.errors?.['maxlength']">Password must be at most 16 characters.</span>
+            <span *ngIf="password?.errors?.['pattern']">Password must include upper, lower, number and special
+              character.</span>
+          </div>
+        </div>
+
+        <div class="mb-3 position-relative">
+          <label class="form-label">Confirm Password</label>
+          <input formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword">
+          <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;"
+            (click)="togglePassword('confirmPassword', $event)">
+            <i class="bi bi-eye" id="eye-confirm" aria-hidden="true"></i>
+          </span>
+          <div class="invalid-feedback d-block" *ngIf="confirmPassword?.invalid && (confirmPassword?.touched || submitted)">
+            <span *ngIf="confirmPassword?.errors?.['required']">Confirm password is required.</span>
+            <span *ngIf="confirmPassword?.errors?.['minlength']">Confirm password must be at least 8 characters.</span>
+            <span *ngIf="confirmPassword?.errors?.['maxlength']">Confirm password must be at most 16 characters.</span>
+          </div>
+          <div class="text-danger mt-1" *ngIf="(submitted || confirmPassword?.touched) && loginForm.errors?.['passwordMismatch']">
+            Passwords do not match.
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100"
+          [disabled]="loginForm.invalid || loginForm.errors?.['passwordMismatch']">Login</button>
+      </form>
+    </div>
+  </div>
+</div>
