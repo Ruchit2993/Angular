@@ -1,70 +1,67 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NV } from '../../shared/nv';
+import { UserService } from '../../services/user.service';
+import { Sidebar } from '../../components/sidebar/sidebar';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Sidebar, HttpClientModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
 export class Login {
   // Replace template-driven model with reactive form fields
-  loginForm: FormGroup;
+  form: FormGroup;
   submitted = false;
-
-  // hobby labels to map FormArray indices to names (from NV)
-  hobbiesLabels = NV.hobbies;
+  userNotFound = false;
+  authError = '';
 
   // expose NV for template usage (labels, placeholders, button text, lists)
   readonly nv = NV;
 
-  constructor(private router: Router, private fb: FormBuilder) {
-    // build reactive form with validators and a form-level password match validator
-    this.loginForm = this.fb.group({
-      firstName: ['', Validators.required],
-      middleName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      mobile: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+  constructor(private router: Router, private fb: FormBuilder, private userService: UserService) {
+    // build reactive form with validators
+    this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      gender: ['', Validators.required],
-      hobbies: this.fb.array(this.hobbiesLabels.map(() => false)),
-      address: ['', Validators.required],
-      country: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16),
-        Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,16}')]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]]
-    }, { validators: this.passwordsMatchValidator() });
+      password: ['', Validators.required]
+    });
   }
 
-  // Form-level validator for password match
-  private passwordsMatchValidator(): ValidatorFn {
-    return (group: AbstractControl): ValidationErrors | null => {
-      const pw = group.get('password')?.value;
-      const cpw = group.get('confirmPassword')?.value;
-      return pw && cpw && pw !== cpw ? { passwordMismatch: true } : null;
-    };
+  onSubmit() {
+    this.submitted = true;
+    this.form.markAllAsTouched();
+    this.userNotFound = false;
+    this.authError = '';
+
+    if (this.form.invalid) return;
+
+    const fv = this.form.value;
+    const user = this.userService.findByEmail(fv.email);
+    if (!user) {
+      this.userNotFound = true;
+      return;
+    }
+    if (user.password !== fv.password) {
+      this.authError = 'Invalid password';
+      return;
+    }
+    // success: store current user and go to users page
+    try { localStorage.setItem('currentUser', JSON.stringify(user)); } catch {}
+    this.router.navigate(['/users']);
   }
 
-  // getters for template convenience
-  get firstName() { return this.loginForm.get('firstName'); }
-  get middleName() { return this.loginForm.get('middleName'); }
-  get lastName() { return this.loginForm.get('lastName'); }
-  get mobile() { return this.loginForm.get('mobile'); }
-  get email() { return this.loginForm.get('email'); }
-  get gender() { return this.loginForm.get('gender'); }
-  get hobbies(): FormArray { return this.loginForm.get('hobbies') as FormArray; }
-  get address() { return this.loginForm.get('address'); }
-  get country() { return this.loginForm.get('country'); }
-  get password() { return this.loginForm.get('password'); }
-  get confirmPassword() { return this.loginForm.get('confirmPassword'); }
+  goRegister() {
+    this.router.navigate(['/register']);
+  }
 
-  // maintain the togglePassword UI functionality
+  // restore togglePassword used by template
   togglePassword(fieldId: string, event: Event) {
-    const input = document.getElementById(fieldId) as HTMLInputElement;
+    const input = document.getElementById(fieldId) as HTMLInputElement | null;
     const icon = (event.currentTarget as HTMLElement).querySelector('i');
     if (input && icon) {
       if (input.type === 'password') {
@@ -76,48 +73,6 @@ export class Login {
         icon.classList.remove('bi-eye-slash');
         icon.classList.add('bi-eye');
       }
-    }
-  }
-
-  // helper used by template to check if passwords match
-  passwordsMatch(): boolean {
-    return !this.loginForm.hasError('passwordMismatch');
-  }
-
-  // toggle hobby at given index (keeps parity with previous toggle behaviour)
-  toggleHobbyByIndex(index: number) {
-    const control = this.hobbies.at(index);
-    control.setValue(!control.value);
-  }
-
-  onSubmit() {
-    this.submitted = true;
-    // mark everything touched to show validation messages
-    this.loginForm.markAllAsTouched();
-
-    if (this.loginForm.valid && !this.loginForm.hasError('passwordMismatch')) {
-      // build user object similar to previous template-driven model
-      const formValue = this.loginForm.value;
-      const selectedHobbies = this.hobbiesLabels.filter((_, i) => formValue.hobbies[i]);
-
-      const user = {
-        firstName: formValue.firstName,
-        middleName: formValue.middleName,
-        lastName: formValue.lastName,
-        mobile: formValue.mobile,
-        email: formValue.email,
-        gender: formValue.gender,
-        hobbies: selectedHobbies,
-        address: formValue.address,
-        country: formValue.country,
-        password: formValue.password,
-        confirmPassword: formValue.confirmPassword
-      };
-
-      console.log('Form Submitted:', user);
-      this.router.navigate(['/home']);
-    } else {
-      // invalid; keep submitted true so template shows validation state
     }
   }
 }

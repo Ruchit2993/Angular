@@ -1,0 +1,94 @@
+<app-sidebar></app-sidebar>
+<div class="container mt-3" style="margin-left:210px; position:relative; z-index:200;">
+  <div class="card">
+    <div class="card-header bg-info text-white"><h3>{{ nv.title }} - Register</h3></div>
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="row mb-3">
+          <div class="col">
+            <label class="form-label">{{ nv.labels.firstName }}</label>
+            <input class="form-control" formControlName="firstName" placeholder="{{ nv.placeholders.firstName }}">
+            <div class="text-danger" *ngIf="form.get('firstName')?.invalid && (form.get('firstName')?.touched || submitted)">
+              Required
+            </div>
+          </div>
+          <div class="col">
+            <label class="form-label">{{ nv.labels.middleName }}</label>
+            <input class="form-control" formControlName="middleName" placeholder="{{ nv.placeholders.middleName }}">
+          </div>
+          <div class="col">
+            <label class="form-label">{{ nv.labels.lastName }}</label>
+            <input class="form-control" formControlName="lastName" placeholder="{{ nv.placeholders.lastName }}">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{{ nv.labels.mobile }}</label>
+          <input class="form-control" formControlName="mobile" placeholder="{{ nv.placeholders.mobile }}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{{ nv.labels.email }}</label>
+          <input class="form-control" formControlName="email" placeholder="{{ nv.placeholders.email }}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{{ nv.labels.gender }}</label><br>
+          <div class="form-check form-check-inline" *ngFor="let g of ['male','female']">
+            <input class="form-check-input" [value]="g" type="radio" formControlName="gender" [id]="g">
+            <label class="form-check-label" [for]="g">{{ g }}</label>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{{ nv.labels.hobby }}</label><br>
+          <div formArrayName="hobbies">
+            <div class="form-check form-check-inline" *ngFor="let hb of hobbies.controls; let i = index">
+              <input class="form-check-input" type="checkbox" [formControlName]="i" [id]="'hobby'+i">
+              <label class="form-check-label" [for]="'hobby'+i">{{ nv.hobbies[i] }}</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{{ nv.labels.address }}</label>
+          <textarea class="form-control" formControlName="address" rows="2" placeholder="{{ nv.placeholders.address }}"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{{ nv.labels.country }}</label>
+          <select class="form-select" formControlName="country">
+            <option value="">{{ 'Select ' + nv.labels.country }}</option>
+            <option *ngFor="let c of nv.countries" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+
+        <div class="mb-3 position-relative">
+          <label class="form-label">{{ nv.labels.password }}</label>
+          <input class="form-control" formControlName="password" type="password" id="reg-password" placeholder="{{ nv.placeholders.password }}">
+          <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;"
+                (click)="togglePassword('reg-password', $event)">
+            <i class="bi bi-eye" aria-hidden="true"></i>
+          </span>
+          <div class="text-danger" *ngIf="form.get('password')?.invalid && (form.get('password')?.touched || submitted)">
+            <span *ngIf="form.get('password')?.errors?.['required']">Password is required.</span>
+          </div>
+        </div>
+
+        <div class="mb-3 position-relative">
+          <label class="form-label">{{ nv.labels.confirmPassword }}</label>
+          <input class="form-control" formControlName="confirmPassword" type="password" id="reg-confirmPassword" placeholder="{{ nv.placeholders.confirmPassword }}">
+          <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;"
+                (click)="togglePassword('reg-confirmPassword', $event)">
+            <i class="bi bi-eye" aria-hidden="true"></i>
+          </span>
+          <div class="text-danger mt-1" *ngIf="(submitted || form.get('confirmPassword')?.touched) && form.get('password')?.value !== form.get('confirmPassword')?.value">
+            Passwords do not match.
+          </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Register</button>
+      </form>
+    </div>
+  </div>
+</div>

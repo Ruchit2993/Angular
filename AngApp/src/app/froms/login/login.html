@@ -1,165 +1,46 @@
-<div class="container mt-5">
-  <div class="card shadow">
-    <div class="card-header bg-info text-white">
-      <h3>Login Form</h3>
-    </div>
-    <div class="card-body bg-light">
-      <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm" novalidate>
-
-        <div class="row mb-3">
-          <div class="col">
-            <label class="form-label">First Name</label>
-            <input name="firstName" [(ngModel)]="user.firstName" #firstName="ngModel" type="text" class="form-control"
-              required>
-            <div class="invalid-feedback d-block"
-              *ngIf="firstName.invalid && (firstName.touched || loginForm.submitted)">
-              <span *ngIf="firstName.errors?.['required']">First name is required.</span>
-            </div>
-          </div>
-
-          <div class="col">
-            <label class="form-label">Middle Name</label>
-            <input name="middleName" [(ngModel)]="user.middleName" #middleName="ngModel" type="text"
-              class="form-control" required>
-            <div class="invalid-feedback d-block"
-              *ngIf="middleName.invalid && (middleName.touched || loginForm.submitted)">
-              <span *ngIf="middleName.errors?.['required']">Middle name is required.</span>
-            </div>
-          </div>
-
-          <div class="col">
-            <label class="form-label">Last Name</label>
-            <input name="lastName" [(ngModel)]="user.lastName" #lastName="ngModel" type="text" class="form-control"
-              required>
-            <div class="invalid-feedback d-block" *ngIf="lastName.invalid && (lastName.touched || loginForm.submitted)">
-              <span *ngIf="lastName.errors?.['required']">Last name is required.</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Mobile Number</label>
-          <input name="mobile" [(ngModel)]="user.mobile" #mobile="ngModel" type="tel" class="form-control"
-            pattern="[0-9]{10}" required>
-          <div class="invalid-feedback d-block" *ngIf="mobile.invalid && (mobile.touched || loginForm.submitted)">
-            <span *ngIf="mobile.errors?.['required']">Mobile number is required.</span>
-            <span *ngIf="mobile.errors?.['pattern']">Mobile must be 10 digits.</span>
-          </div>
-        </div>
-
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+  <div class="card shadow-sm" style="max-width:420px; width:100%;">
+    <div class="card-body">
+      <h4 class="card-title mb-3 text-center">Login</h4>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="mb-3">
           <label class="form-label">Email</label>
-          <input name="email" [(ngModel)]="user.email" #email="ngModel" type="email" class="form-control" required>
-          <div class="invalid-feedback d-block" *ngIf="email.invalid && (email.touched || loginForm.submitted)">
-            <span *ngIf="email.errors?.['required']">Email is required.</span>
-            <span *ngIf="email.errors?.['email']">Invalid email format.</span>
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Gender</label><br>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" name="gender" [(ngModel)]="user.gender" #gender="ngModel" type="radio"
-              id="male" value="male" required>
-            <label class="form-check-label" for="male">Male</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" name="gender" [(ngModel)]="user.gender" type="radio" id="female"
-              value="female">
-            <label class="form-check-label" for="female">Female</label>
-          </div>
-          <div class="invalid-feedback d-block" *ngIf="gender.invalid && (gender.touched || loginForm.submitted)">
-            <span *ngIf="gender.errors?.['required']">Gender is required.</span>
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Hobby</label><br>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="hobby1" value="Reading" (change)="toggleHobby($event)"
-              [checked]="user.hobbies.includes('Reading')">
-            <label class="form-check-label" for="hobby1">Reading</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="hobby2" value="Sports" (change)="toggleHobby($event)"
-              [checked]="user.hobbies.includes('Sports')">
-            <label class="form-check-label" for="hobby2">Sports</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="hobby3" value="Music" (change)="toggleHobby($event)"
-              [checked]="user.hobbies.includes('Music')">
-            <label class="form-check-label" for="hobby3">Music</label>
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Address</label>
-          <textarea name="address" [(ngModel)]="user.address" #address="ngModel" class="form-control" rows="2"
-            required></textarea>
-          <div class="invalid-feedback d-block" *ngIf="address.invalid && (address.touched || loginForm.submitted)">
-            <span *ngIf="address.errors?.['required']">Address is required.</span>
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Country</label>
-          <select name="country" [(ngModel)]="user.country" #country="ngModel" class="form-select" required>
-            <option value="">Select Country</option>
-            <option value="India">India</option>
-            <option value="USA">USA</option>
-            <option value="UK">UK</option>
-            <option value="Canada">Canada</option>
-          </select>
-          <div class="invalid-feedback d-block" *ngIf="country.invalid && (country.touched || loginForm.submitted)">
-            <span *ngIf="country.errors?.['required']">Country is required.</span>
+          <input type="email" class="form-control" formControlName="email" placeholder="Enter email" />
+          <div *ngIf="(submitted || f['email'].touched) && f['email'].invalid" class="text-danger small mt-1">
+            Email is required and must be valid.
           </div>
         </div>
 
         <div class="mb-3 position-relative">
           <label class="form-label">Password</label>
-          <input name="password" [(ngModel)]="user.password" #password="ngModel" type="password" class="form-control"
-            id="password" required minlength="8" maxlength="16"
-            pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,16}">
-          <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;"
-            (click)="togglePassword('password', $event)">
-            <i class="bi bi-eye" id="eye-password" aria-hidden="true"></i>
-          </span>
-          <div class="form-text text-muted">
-            Password must be 8–16 characters and include at least one uppercase letter,
-            one lowercase letter, one number, and one special character.
+          <div class="input-group">
+            <input id="loginPwd" type="password" class="form-control" formControlName="password"
+              placeholder="Enter password" />
+            <button type="button" class="btn btn-outline-secondary" (click)="togglePassword('loginPwd')"
+              title="Show / hide password">
+              <i class="bi bi-eye"></i>
+            </button>
           </div>
-          <div class="invalid-feedback d-block" *ngIf="password.invalid && (password.touched || loginForm.submitted)">
-            <span *ngIf="password.errors?.['required']">Password is required.</span>
-            <span *ngIf="password.errors?.['minlength']">Password must be at least 8 characters.</span>
-            <span *ngIf="password.errors?.['maxlength']">Password must be at most 16 characters.</span>
-            <span *ngIf="password.errors?.['pattern']">Password must include upper, lower, number and special
-              character.</span>
+          <div *ngIf="(submitted || f['password'].touched) && f['password'].invalid" class="text-danger small mt-1">
+            Password is required.
           </div>
         </div>
 
-        <div class="mb-3 position-relative">
-          <label class="form-label">Confirm Password</label>
-          <input name="confirmPassword" [(ngModel)]="user.confirmPassword" #confirmPassword="ngModel" type="password"
-            class="form-control" id="confirmPassword" required minlength="8" maxlength="16">
-          <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;"
-            (click)="togglePassword('confirmPassword', $event)">
-            <i class="bi bi-eye" id="eye-confirm" aria-hidden="true"></i>
-          </span>
-          <div class="invalid-feedback d-block"
-            *ngIf="(confirmPassword.invalid && (confirmPassword.touched || loginForm.submitted))">
-            <span *ngIf="confirmPassword.errors?.['required']">Confirm password is required.</span>
-            <span *ngIf="confirmPassword.errors?.['minlength']">Confirm password must be at least 8 characters.</span>
-            <span *ngIf="confirmPassword.errors?.['maxlength']">Confirm password must be at most 16 characters.</span>
-          </div>
-          <div class="text-danger mt-1"
-            *ngIf="(confirmPassword.touched || loginForm.submitted) && user.password !== user.confirmPassword">
-            Passwords do not match.
-          </div>
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary" type="submit">Login</button>
         </div>
-
-        <button type="submit" class="btn btn-primary w-100"
-          [disabled]="loginForm.invalid || !passwordsMatch()">Login</button>
       </form>
+
+      <div *ngIf="userNotFound" class="alert alert-warning mt-3">
+        No user found with this email. <a (click)="goRegister()" class="link-primary" style="cursor:pointer">Register
+          now</a>.
+      </div>
+
+      <div *ngIf="authError" class="alert alert-danger mt-3">{{authError}}</div>
+
+      <div class="text-center mt-3 small">
+        Don't have an account? <a (click)="goRegister()" style="cursor:pointer">Register</a>
+      </div>
     </div>
   </div>
 </div>

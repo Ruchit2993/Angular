@@ -1,14 +1,12 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { Header } from './common/header/header';
-import { Footer } from './common/footer/footer';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,Header,Footer],
-  templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  host: { 'class': 'bg-dark text-white' },
+  template: `<router-outlet class="bg-dark text-white"></router-outlet>`
 })
-export class App {
-  protected readonly title = signal('AngApp');
-}
+export class App {}
