@@ -2,10 +2,12 @@
 <!-- show header only when showLayout is true -->
 <app-header *ngIf="showLayout"></app-header>
 
+<app-sidebar *ngIf="showLayout"></app-sidebar>
+
 <main class="container">
   <!-- router renders login/register/users here -->
   <router-outlet></router-outlet>
 </main>
 
 <!-- show footer only when showLayout is true -->
-<app-footer *ngIf="showLayout" class="sticky-bottom"></app-footer>
+<app-footer *ngIf="showLayout"></app-footer>

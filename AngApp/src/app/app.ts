@@ -6,11 +6,12 @@ import { filter } from 'rxjs/operators';
 
 import { Header } from './common/header/header';
 import { Footer } from './common/footer/footer';
+import { Sidebar } from './common/sidebar/sidebar';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, Header, Footer],
+  imports: [CommonModule, RouterOutlet, Header, Footer, Sidebar],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
