@@ -6,9 +6,11 @@
         <div class="mb-3">
           <label class="form-label">Email</label>
           <input type="email" class="form-control" formControlName="email" placeholder="Enter email" />
-          <div *ngIf="(submitted || f['email'].touched) && f['email'].invalid" class="text-danger small mt-1">
-            Email is required and must be valid.
-          </div>
+          @if ((submitted || f['email'].touched) && f['email'].invalid) {
+            <div class="text-danger small mt-1">
+              Email is required and must be valid.
+            </div>
+          }
         </div>
 
         <div class="mb-3 position-relative">
@@ -21,9 +23,11 @@
               <i class="bi bi-eye"></i>
             </button>
           </div>
-          <div *ngIf="(submitted || f['password'].touched) && f['password'].invalid" class="text-danger small mt-1">
-            Password is required.
-          </div>
+          @if ((submitted || f['password'].touched) && f['password'].invalid) {
+            <div class="text-danger small mt-1">
+              Password is required.
+            </div>
+          }
         </div>
 
         <div class="d-grid gap-2">
@@ -31,12 +35,16 @@
         </div>
       </form>
 
-      <div *ngIf="userNotFound" class="alert alert-warning mt-3">
-        No user found with this email. <a (click)="goRegister()" class="link-primary" style="cursor:pointer">Register
-          now</a>.
-      </div>
+      @if (userNotFound) {
+        <div class="alert alert-warning mt-3">
+          No user found with this email. <a (click)="goRegister()" class="link-primary" style="cursor:pointer">Register
+            now</a>.
+        </div>
+      }
 
-      <div *ngIf="authError" class="alert alert-danger mt-3">{{authError}}</div>
+      @if (authError) {
+        <div class="alert alert-danger mt-3">{{authError}}</div>
+      }
 
       <div class="text-center mt-3 small">
         Don't have an account? <a (click)="goRegister()" style="cursor:pointer">Register</a>
