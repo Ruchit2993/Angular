@@ -1,13 +1,19 @@
 
 <!-- show header only when showLayout is true -->
-<app-header *ngIf="showLayout"></app-header>
+<app-header *ngIf="showLayout" class="sticky-top"></app-header>
 
-<app-sidebar *ngIf="showLayout"></app-sidebar>
+<!-- <app-sidebar *ngIf="showLayout"></app-sidebar> -->
 
-<main class="container">
+<!-- <main class="container"> -->
   <!-- router renders login/register/users here -->
-  <router-outlet></router-outlet>
-</main>
+  <!-- <router-outlet></router-outlet> -->
+<!-- </main> -->
+ <div class="d-flex">
+  <app-sidebar *ngIf="showLayout" ></app-sidebar>
+  <div class="flex-grow-1 p-3">
+    <router-outlet ></router-outlet>
+  </div>
+</div>
 
 <!-- show footer only when showLayout is true -->
 <app-footer *ngIf="showLayout"></app-footer>
