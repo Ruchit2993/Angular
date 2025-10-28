@@ -35,11 +35,11 @@
               @for (u of users; track u.id) {
                 <tr>
                   <td>{{u.id}}</td>
-                  <td>{{u.name || u.firstName}}</td>
+                  <td>{{u.name}}</td>
                   <td>{{u.lastName}}</td>
                   <td>{{u.email}}</td>
-                  <td>{{u.mobile || u.phone}}</td>
-                  <td>{{u.country || (u.address?.country ?? '')}}</td>
+                  <td>{{u.mobile}}</td>
+                  <td>{{u.country}}</td>
                   <td>
                     <button class="btn btn-sm btn-danger" (click)="delete(u.id)">Delete</button>
                   </td>

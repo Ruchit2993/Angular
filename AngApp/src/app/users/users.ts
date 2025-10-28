@@ -10,7 +10,7 @@ import { UserService, AppUser } from '../services/user.service';
   templateUrl: './users.html',
 })
 export class Users implements OnInit {
-  users: any[] = [];
+  users: AppUser[] = [];
   year = new Date().getFullYear();
 
   constructor(private userService: UserService, private router: Router) {}
@@ -30,8 +30,21 @@ export class Users implements OnInit {
     this.userService.saveAll(mapped);
     this.users = this.userService.getAll();
   }
+
   delete(id: number) {
+    if (!confirm('Are you sure you want to delete this user?')) return;
+
+    // Remove from local array
     this.users = this.users.filter(u => u.id !== id);
+
+    // Update localStorage via UserService
+    const updatedUsers = this.users;
+    try {
+      localStorage.setItem('app_users', JSON.stringify(updatedUsers));
+      console.log(`User with id ${id} deleted successfully.`);
+    } catch (err) {
+      console.error('Failed to update localStorage after deleting user', err);
+    }
   }
 
   logout() {
